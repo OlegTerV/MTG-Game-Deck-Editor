@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MTG Lab</title>
+    <meta charset="UTF-8" />
+
+    <script src="src/index.js" type="module"></script>
+    <link href="styles/app.css" rel="stylesheet">
+</head>
+
+<body>
+<header>
+    <h1>MTG Deck Builder</h1>
+</header>
+    <main class="main">
+        <div id="menu">
+            <h2 style="display: flex; justify-content: center;">Cards</h2>
+            <input style="position: relative; left: 10%;" type="search" id="search-input" name="search-input" />
+            <button style="position: relative; left: 10%;" type="button" id="search-button" name="button">Search</button>
+            <div id="listContainer"></div>
+        </div>
+
+        <div class="content" id="my_block">           
+            <div id="my_deck" style="height: 430px; width: 700px; margin: 0 auto; border-width: 1px; border-style: solid; border-color: black; overflow-y:scroll">
+                <h2 style="text-align: center;" >My deck</h2>
+                <p id="number_of_cards" style="margin-left: 10px; margin-bottom: 3px;">Number of cards in deck: 0</p>
+                <!-- <p style ="padding-left: 40px;">Number of cards in deck:</p>-->
+            </div>
+            <div id="specific_card_info" style = "text-align:center; margin-top: 20px;";>
+            </div>
+        </div>
+        <div id="stats">
+            <h2>Stats</h2>
+            <div class="widgets">
+                <div id = "manaStats">
+                </div>
+                <div id = "colorStats">
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+<footer>
+</footer>
+</body>
+</html>

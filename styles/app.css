@@ -1,0 +1,57 @@
+.main {
+    display: flex;
+}
+
+.content {
+    flex-grow: 0.6;
+}
+#menu{
+    flex-grow: 0.2;
+    height: 800px;
+    overflow: hidden;
+    overflow-y: scroll;
+    border: black 1px solid;
+}
+#stats{
+    flex-grow: 0.2;
+    height: 800px;
+    overflow: hidden;
+    overflow-y: scroll;
+    border: black 1px solid;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+}
+#colorStats {
+    margin-top: 12px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#manaStats {
+    margin-left: 20px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.widgets{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.astext {
+    background:none;
+    border:none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.buttonclass {
+    position: relative;
+    bottom: 10px;
+}
