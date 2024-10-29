@@ -26,13 +26,14 @@ function setup() {
                 listItem.innerHTML = card.name;   
                 listItem.id = card.id;
                 listItem.classList.add("astext");
-                list.appendChild(listItem)
+                list.appendChild(listItem);
+                listItem.addEventListener("click",card_info);
             })
             menu.innerHTML = ''
 
             menu.appendChild(list);
             let cards_names = document.getElementById('cards_names');
-            cards_names.addEventListener("click", card_info);
+           // cards_names.addEventListener("click", card_info);
             new ColorStats().buildStats(document.getElementById("colorStats"));
             new ManaCostStats().buildStats(document.getElementById("manaStats"));
         })
@@ -57,12 +58,13 @@ function find_cards() {
                 listItem.id = card.id;
                 listItem.classList.add("astext");
                 list.appendChild(listItem)
+                listItem.addEventListener("click",card_info)
             })
             menu.innerHTML = ''
 
             menu.appendChild(list);  
             let cards_names = document.getElementById('cards_names');
-            cards_names.addEventListener("click", card_info);           
+         //  cards_names.addEventListener("click", card_info);           
         })      
 }
 
@@ -103,21 +105,26 @@ function card_info(event) {
             const add_card_button = document.getElementById('button_add_a_card_to_the_deck');
             add_card_button.addEventListener("click", function(event){
 
-            let elements = specific_card.colors[0];
-                if (((cards_in_the_deck.has(specific_card.id)==true)&&((cards_in_the_deck.get(specific_card.id)<4)))||(cards_in_the_deck.has(specific_card.id)==false)||(elements=='B')){
+            let elements = specific_card.types;
+            let land=elements.includes("Land");
+                if (((cards_in_the_deck.has(specific_card.id)==true)&&((cards_in_the_deck.get(specific_card.id)<4)))||(cards_in_the_deck.has(specific_card.id)==false)||(land==true)){
                     count_of_cards_in_the_deck++;
-                    if ((cards_in_the_deck.has(specific_card.id)==true)&&((cards_in_the_deck.get(specific_card.id)<4))&&(elements!='B')){
+                    if ((cards_in_the_deck.has(specific_card.id)==true)&&((cards_in_the_deck.get(specific_card.id)<4))&&(land==false)){
                         let val = cards_in_the_deck.get(specific_card.id)+1;
                         cards_in_the_deck.set(specific_card.id, val)
                     }
-                    else if ((cards_in_the_deck.has(specific_card.id)==false)&&(elements!='B')){
+                    else if ((cards_in_the_deck.has(specific_card.id)==false)&&(land==false)){
                         cards_in_the_deck.set(specific_card.id, 1)
                     }
-                    data_statistics = rebuildData(parseInt(specific_card.manaCost[1]));
-                    new ManaCostStats().buildStats(document.getElementById("manaStats"),data_statistics);
 
-                    data_color = add_color_statistics(specific_card.colorIdentity[0]);
-                    new ColorStats().buildStats(document.getElementById("colorStats"), data_color);
+                    if (land==false){
+                        
+                        data_statistics = rebuildData(parseInt(specific_card.cmc));
+                        new ManaCostStats().buildStats(document.getElementById("manaStats"),data_statistics);
+
+                        data_color = add_color_statistics(specific_card.colorIdentity[0]);
+                        new ColorStats().buildStats(document.getElementById("colorStats"), data_color);
+                    }
 
                     number_of_cards.innerHTML="Number of cards in deck: "+count_of_cards_in_the_deck;
                     const my_deck = document.getElementById('my_deck');
@@ -146,16 +153,16 @@ function card_info(event) {
                     specific_card_info.innerHTML = '';
 
                     remove_card.addEventListener("click", function(event){
-                        if (elements!='B'){
+                        if (land==false){
                             let val = cards_in_the_deck.get(specific_card.id)-1;
                             cards_in_the_deck.set(specific_card.id, val)
+
+                            data_statistics = rebuildData_delete(parseInt(specific_card.cmc));                       
+                            new ManaCostStats().buildStats(document.getElementById("manaStats"),data_statistics);
+                        
+                            data_color = remove_color_statistics(specific_card.colorIdentity[0]);
+                            new ColorStats().buildStats(document.getElementById("colorStats"), data_color);
                         }
-                        data_statistics = rebuildData_delete(parseInt(specific_card.manaCost[1]));                       
-                        new ManaCostStats().buildStats(document.getElementById("manaStats"),data_statistics);
-                        
-                        data_color = remove_color_statistics(specific_card.colorIdentity[0]);
-                        new ColorStats().buildStats(document.getElementById("colorStats"), data_color);
-                        
                         my_deck.removeChild(div_card_of_the_deck);
                         count_of_cards_in_the_deck--;
                         number_of_cards.innerHTML="Number of cards in deck: "+count_of_cards_in_the_deck;
@@ -183,6 +190,7 @@ function rebuildData(manna){
         cost_count.set(manna, 1);
     }
     //console.log(cost_count);
+    cost_count = new Map([...cost_count].sort());
     let data = []
     for (let key of cost_count.keys()) {
         data.push({ cost: key, count: cost_count.get(key) })
@@ -198,6 +206,7 @@ function rebuildData_delete(manna){
         cost_count.delete(manna);
     }
     //console.log(cost_count);
+    cost_count = new Map([...cost_count].sort());
     let data = []
     for (let key of cost_count.keys()) {
         data.push({ cost: key, count: cost_count.get(key) })
@@ -207,6 +216,7 @@ function rebuildData_delete(manna){
 function add_color_statistics(color_card){
     let value = color_count.get(color_card)+1;
     color_count.set(color_card, value);
+    cost_count = new Map([...cost_count].sort());
     let data = []
     for (let key of color_count.keys()) {
         data.push({ color: key, count: color_count.get(key) })
@@ -216,6 +226,7 @@ function add_color_statistics(color_card){
 function remove_color_statistics(color_card){
     let value = color_count.get(color_card)-1;
     color_count.set(color_card, value);
+    cost_count = new Map([...cost_count].sort());
     let data = []
     for (let key of color_count.keys()) {
         data.push({ color: key, count: color_count.get(key) })
